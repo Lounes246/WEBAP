@@ -1,0 +1,728 @@
+* {
+  font-family: 'g Guarantee', sans-serif;
+}
+
+body {
+  min-width: 715px;
+  margin: 0;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  height: 100vh;
+  background-image: url("../img/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-color: #F2F2F2;
+  background-attachment: fixed;
+  color: #333333;
+}
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+@media (max-width: 1300px) {
+  body {
+    background-size: auto 100%;
+    background-position: center center;
+  }
+
+  .logo {
+    width: 360px;
+  }
+}
+
+body header{
+  color:#ffdd00;
+  text-align: center;
+  -webkit-text-stroke: 1.5px rgb(44, 87, 165);
+}
+
+nav {
+  height: 50px;
+  margin: 10px 0px;
+}
+
+nav ul {
+  font-size: 1.5em;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  margin: 0;
+}
+
+nav li {
+  margin: 0 20px;
+  /* Adjust the spacing between menu items */
+}
+
+nav a {
+  text-decoration: none;
+  color: #0055A4;
+  /* Pokémon Blue */
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #FFDE00;
+  /* Pokémon Yellow */
+  text-shadow: 1px 1px 6px #0055A4;
+}
+
+main {
+  padding: 10px;
+  margin-bottom: 50px;
+  color: #ded8c9;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  background-color: rgb(80, 69, 54);
+  border-radius: 10px;
+  border-color: #FFCB05;
+  border-width: 0.5em;
+  border-style: outset;
+  text-align: center;
+  overflow: hidden;
+}
+
+main ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Style list items */
+main li {
+  margin: 0;
+  padding: 0 0 0 20px; /* Adjust the padding as needed */
+  text-align: center;
+  position: relative;
+}
+
+/* Style the list marker (dot) */
+main li::before {
+  content: "•"; /* Unicode bullet character */
+  position: relative;
+  right: 0.6em;
+}
+  
+
+.startpoke:active {
+  transform: translate(1px, 2px);
+  box-shadow: 5px 5px 5px #1b1a1a92;
+}
+
+.startpoke {
+  position: relative;
+  overflow: hidden;
+  width: 250px;
+  height: 250px;
+  padding: 1em;
+  border-radius: 20px;
+  margin: 25px;
+  border-style: outset;
+  border-width: 4px;
+  box-shadow: 10px 10px 5px #1b1a1a92;
+
+}
+
+.startpoke>img {
+  width: 100%;
+
+}
+
+.startinfo {
+  font-size: larger;
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #20402600;
+  padding: 1em;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/*This is the base aniamtion*/
+.shine:after {
+  content: '';
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  bottom: -100%;
+  left: -100%;
+  background: linear-gradient(to bottom, rgba(229, 172, 142, 0), rgba(255, 255, 255, 0.5) 50%, rgba(229, 172, 142, 0));
+  transform: rotateZ(60deg) translate(-14em, 20em);
+}
+
+/*This activates the shine once the button has been hovered*/
+.shine:hover::after,
+button:focus::after {
+  animation: shine 1s forwards;
+}
+
+@keyframes shine {
+  100% {
+    transform: rotateZ(60deg) translate(3em, -25em);
+  }
+}
+
+button{
+  position: relative;
+  overflow: hidden;
+  width: 250px;
+  height: 50px;
+  padding: 1em;
+  border-radius: 20px;
+  margin: 25px;
+  border-style: outset;
+  border-width: 4px;
+  box-shadow: 10px 10px 5px #1b1a1a92;
+}
+
+.narrow{
+  width: 65px;
+  height: 50px;
+  font-size: 2em;
+  padding:0px;
+  line-height: 0.75em;
+  vertical-align: middle;
+}
+.inline{
+  display: inline-block;
+
+}
+
+input{
+  position: relative;
+  width: 80%;
+  height: 36px;
+  padding: 0em;
+  padding-left: 1em;
+  border-radius: 20px;
+  margin: 18px;
+  border-style: outset;
+  border-width: 4px;
+  box-shadow: 10px 10px 5px #1b1a1a92;
+}
+
+input[type=submit]{
+  width: 86%;
+  height: 50px;
+  border-radius: 25px;
+
+}
+
+input[type=submit]:hover{
+  transform: translate(1px, 2px);
+}
+
+
+
+
+
+
+select {
+  position: relative;
+  width: 86%;
+  height: 44px;
+  border-radius: 20px;
+  border-style: outset;
+  border-width: 4px;
+  margin: 18px;
+  box-shadow: 10px 10px 5px #1b1a1a92;
+  padding: 0em;
+  padding-left: 1em;
+}
+
+.warning{
+  color: #ff6666; /* Light red color */
+  font-style: italic;
+  margin-left:8%;
+  margin-top:0px;
+  height:20px;
+}
+
+.success{
+  color: #66ff87; /* Light red color */
+  font-style: italic;
+  margin-left:8%;
+  margin-top:0px;
+  height:20px;
+}
+
+select option {
+  position: relative;
+  width: 105px;
+  height: 36px;
+  border-radius: 16px;
+  border-style: outset;
+  border-width: 4px;
+  padding: 4px;
+}
+
+
+
+
+
+
+#chapTxt{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button:active {
+  transform: translate(1px, 2px);
+  box-shadow: 5px 5px 5px #1b1a1a92;
+}
+
+
+#team {
+  display: inline-block;
+  width: 30%;
+  list-style: none;
+  padding: 10px;
+}
+
+#stats {
+  display: inline-block;
+  width: 60%;
+  top: 50px;
+  vertical-align: top;
+  padding: 10px;
+  margin-top: 40px;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+dialog {
+  border-radius: 10px;
+  border-color: #000000;
+  border-width: 0.5em;
+  border-style: outset;
+
+
+}
+
+ .flexed {
+  display:flex;
+  align-items: center;
+}
+
+dialog h2 {
+  text-align: center;
+}
+
+
+
+
+dialog .section{
+  text-align: center;
+  
+}
+
+#avatar {
+  width: 180px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+
+#runaway{
+  background: url("../img/animations/psyduck.gif") repeat center;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  cursor: pointer;
+  width: 100px; 
+  height: 100px; 
+  background-color: #ded8c9;
+  border-radius: 10px;
+  border-color:  hsl(343, 40%, 57%);
+  border-width: 0.5em;
+  border-style: outset;
+  animation: wiggle 2.5s infinite;
+}
+
+
+@keyframes wiggle {
+  0% { transform: rotate(0deg); }
+ 80% { transform: rotate(0deg); }
+ 85% { transform: rotate(5deg); }
+ 95% { transform: rotate(-5deg); }
+100% { transform: rotate(0deg); }
+}
+
+        /* Add your CSS styles here */
+        .section {
+          margin: 20px;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+      }
+
+      /* Add your CSS styles here */
+      .entry {
+
+          margin: 20px;
+          padding: 10px;
+          border: 5px solid #343434;
+          border-radius: 12px;
+          border-style: outset;
+      }
+
+      .term {
+          color: #eebd29;
+      }
+
+      .part {
+          font-weight: bold;
+      }
+
+      .definition {
+          margin-top: 5px;
+      }
+
+      .quote {
+          background-color: #eee4db;
+          border-left: 12px solid #e1b71f;
+          padding: 10px;
+          margin-top: 10px;
+          border-radius: 10px;
+      }
+
+      .quote-line {
+          margin-bottom: 5px;
+          color: #222;
+      }
+
+      .quote-author {
+          text-align: right;
+          color: #393939;
+      }
+
+      #preview {
+        margin-top:140px;
+        display: inline-block;
+        width:45%;
+        text-shadow: 10px 10px 5px #1b1a1a92;
+        height:400px;
+        vertical-align:top;
+      }
+
+      #preview .term:hover {
+        cursor: pointer;
+        transform: translate(1px, 2px);
+        text-shadow: 5px 5px 5px #1b1a1a92;
+      }
+
+      #entry {
+        margin-top:100px;
+        display: inline-block;
+        width:45%;
+      }
+
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+
+.pokemon-health {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+
+
+
+
+
+.health-text {
+  width:200px;
+  color:#282828;
+  font-weight: bold;
+  background-color: #00000000;
+  overflow:visible;
+  text-align: center; 
+  line-height: 20px; 
+
+}
+
+
+.health-bar {
+  width: 200px;
+  height: 20px;
+  background-color: #ddd;
+  border: 1px solid #333;
+  border-radius: 5px;
+  overflow: hidden;
+
+}
+
+
+
+/* Additional styles for different health levels */
+.low-health {
+  background-color: #FF5733; /* Red for low health */
+}
+.medium-health {
+  background-color: #FFD633; /* Yellow for medium health */
+}
+.full-health{
+  background-color: #4caf50;
+}
+
+
+
+/* CSS for the spinner */
+.pot {
+  width: 100%; /* Set the spinner to cover the entire container width */
+  height: 150px; /* Adjust the spinner's height as needed */
+  position: relative;
+}
+
+/* Style for the Pokémon images container */
+.prices {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap; /* Prevent wrapping to new rows */
+  overflow-x: hidden; /* Add horizontal scrolling if necessary */
+  animation: none; /* Disable animation by default */
+  transition: transform 0.5s ease-in-out; /* Smooth rotation transition */
+  padding:8px;
+}
+
+/* Style for the Pokémon images */
+.prices img {
+  max-width: 100px; /* Adjust the image size as needed */
+  margin-right: 20px; /* Adjust the margin between images as needed */
+  border: 2px solid #27170f; /* Add a border for style */
+  border-radius: 6px;
+  box-shadow: 5px 5px 5px #1b1a1a92;
+  background-color:#3d312bab ;
+  padding: 12px;
+
+}
+
+@keyframes spin {
+  0% { transform: translateX(0%); animation-timing-function: ease-in; }
+  10% { transform: translateX(-30%); animation-timing-function: ease-out; }
+  20% { transform: translateX(-50%); animation-timing-function: ease-out; }
+  30% { transform: translateX(-60%); animation-timing-function: ease-out; }
+  40% { transform: translateX(-70%); animation-timing-function: ease-out; }
+  50% { transform: translateX(-80%); animation-timing-function: ease-out; }
+  60% { transform: translateX(-90%); animation-timing-function: ease-out; }
+  70% { transform: translateX(-95%); animation-timing-function: ease-out; }
+  80% { transform: translateX(-98%); animation-timing-function: ease-out; }
+  90% { transform: translateX(-99%); animation-timing-function: ease-out; }
+  100% { transform: translateX(-100%); animation-timing-function: ease-out; }
+}
+
+/* Animation class for spinning */
+.spinning {
+  animation: spin; /* Linear rotation without infinite */
+}
+
+
+.highlight-box {
+  position:absolute;
+  top: -10px; /* Adjust to position it above the prices */
+  left: 400px; /* Center horizontally within the .pot container */
+  width: 0px;
+  height: 160px;
+  background-color: rgba(53, 53, 53, 0); /* Change to the desired highlight color */
+  border: 2px solid #d3ac01; /* Add a border for style */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px; /* Adjust the font size as needed */
+  font-weight: bold;
+}
+
+@keyframes blink-border {
+  0% {
+    border-color:  rgb(0, 0, 0);
+  }
+  50% {
+    border-color: rgb(255, 208, 0);
+
+  }
+  100% {
+    border-color:  rgb(0, 0, 0);
+  }
+}
+
+.blinking-border {
+  border: 2px solid transparent; /* Set initial border style and width */
+  animation: blink-border 1s infinite; /* Use the blink-border animation */
+}
+
+.greyed-out {
+  filter:grayscale(100%);
+  transition: filter 2s ease;
+}
+
+#arena{
+  position: relative;
+  background-image: url(../img/arenas/arena.jpg);
+  background-size:cover;
+  height:400px;
+  width:90%;
+  margin:auto;
+}
+
+#arena .pokemon{
+  position: absolute;
+  width:200px;
+}
+
+#arena img{
+  height:120x;
+  width:120px;
+  -webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+#player{
+  height:270px;
+  left: 10px;
+  bottom:10px;
+}
+#opponent{
+  right: 10px;
+  top:10px;
+}
+
+.btnAttack{
+  position:relative;
+  overflow:hidden;
+width: 120px;
+height: 40px;
+padding: 0.6em;
+border-radius: 20px;
+margin: 4px;
+border-style: outset;
+border-width: 4px;
+box-shadow: 10px 10px 5px #1b1a1a92;
+}
+
+
+.btnAttack:active {
+  transform: translate(1px,2px);
+  box-shadow: 5px 5px 5px #1b1a1a92;
+}
+
+
+
+
+
+.current-health {
+  height: 100%;
+  width: 100%;
+  background-color: #4caf50;
+}
+
+
+
+#battles{
+  padding:4px;
+}
+
+
+#opponents{
+  padding:4px;
+}
+
+
+.half{
+  top: 0; 
+  display: inline-block;
+  width: 45%;
+  vertical-align: top;
+}
+
+/* Registration Result Page Styling */
+.result-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.success-box,
+.error-box {
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.success-box {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+  color: #155724;
+}
+
+.error-box {
+  background-color: #f8d7da;
+  border: 2px solid #dc3545;
+  color: #721c24;
+}
+
+.success-box h2,
+.error-box h2 {
+  margin-top: 0;
+  font-size: 2em;
+}
+
+.success-box p,
+.error-box p {
+  font-size: 1.1em;
+  margin: 20px 0;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 15px;
+  background-color: #2c57a5;
+  color: #ffdd00;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: 2px solid #2c57a5;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #1f3f7a;
+  border-color: #1f3f7a;
+}
+
+

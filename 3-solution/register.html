@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Basics</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.cdnfonts.com/css/g-guarantee" rel="stylesheet">
+    <!-- import jquery Library -->
+    <script type="text/javascript" src="js/code.jquery.com_jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="js/code.jquery.com_ui_1.13.2_jquery-ui.js"></script>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="img/logo.png" alt="Pokémon">
+        <h1>3. Ajax dynamic content Exercises</h1>
+    </header>
+    <main>
+        <h2>Exercise 1: Loading Php Sources asyncronously</h2>
+        <h3>Who are you?</h3>
+        <form id="registerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <p id="UWarn" class="warning"></p>
+
+            <label for="birthdate">Birth date:</label>
+            <input type="date" id="birthdate" name="birthdate" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="hometown">Hometown:</label>
+            <input list="towns" name="hometown" id="hometown" required>
+            <datalist id="towns">
+                <option value="loading...">
+            </datalist>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="passwordc">Password confirm:</label>
+            <input type="password" id="passwordc" name="passwordc" required>
+            <p id="PWarn" class="warning"></p>
+
+            <input type="submit" value="Submit">
+        </form>
+        <div id="resultMessage" class="warning" style="display:none; margin-top: 20px;"></div>
+        <script>
+            // Exercise 1 Instructions:
+            // We want to gather the Users information to create a profile in the database later on.
+            // a. Write a php script to serve the content of the datalist "hometowns".
+            // b. On page ready asynchronously load said content.
+            // c. When the user types in the username input send the just typed information to a php script for checking.
+            //    A username can not exsist twice in the system. If the username exsists, return an error and 
+            //    show the said error in the predefined html element "Uwarn"
+            // Make the Button disapear after the answer has been given.
+            // d. Check if the user has entered the password confirmation correctly. Throw an error accordingly.
+            $(document).ready(function () {
+
+                //Fill the datalist for the available towns
+                $("#towns").load("php/genHometowns.php");
+
+                // Function to check if the passwords match
+                $('#passwordc').on('input', function () {
+                    var password = $('#password').val();
+                    var confirmPassword = $(this).val();
+
+                    if (password !== confirmPassword) {
+                        $('#PWarn').text("Passwords do not match.").attr('class','warning');
+                    } else {
+                        $('#PWarn').text("Password ok").attr('class','success');
+                    }
+                });
+
+                // Function to check if the username already exists
+                $('#username').on('input', function () {
+                    var username = $(this).val();
+
+                    $.post('php/checkUsername.php', { "username": username }, function (data) {
+                        if (data === "ok") {
+                            $('#UWarn').text("Username available").attr('class','success');
+                        } else {
+                            $('#UWarn').text("Username not available").attr('class','warning');
+                        }
+                    });
+                });
+
+                // Handle form submission with AJAX
+                $('#registerForm').on('submit', function (e) {
+                    e.preventDefault();
+
+                    var formData = {
+                        username: $('#username').val(),
+                        birthdate: $('#birthdate').val(),
+                        gender: $('#gender').val(),
+                        hometown: $('#hometown').val(),
+                        password: $('#password').val(),
+                        passwordc: $('#passwordc').val()
+                    };
+
+                    $.post('php/doRegister.php', formData, function (data) {
+                        var $resultDiv = $('#resultMessage');
+                        if (data.success) {
+                            $resultDiv.text(data.message).attr('class','success').show();
+                            $('#registerForm')[0].reset();
+                            setTimeout(function() {
+                                window.location.href = 'index.php';
+                            }, 2000);
+                        } else {
+                            $resultDiv.text(data.message).attr('class','warning').show();
+                        }
+                    }, 'json');
+                });
+            });
+        </script>
+    </main>
+</body>
+
+</html>
