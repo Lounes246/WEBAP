@@ -143,6 +143,19 @@ if (!isset($_SESSION['id'])) {
     .no-conversation {
       display:flex; align-items:center; justify-content:center; height:100%; color:#999; font-size:18px;
     }
+    .chat-input-area textarea {
+  flex: 1;
+  resize: none;              /* pas de resize manuel */
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.4;
+  max-height: 120px;         /* ≈ 5 lignes */
+  overflow-y: auto;
+  font-family: inherit;
+}
+
   </style>
 </head>
 
@@ -186,9 +199,13 @@ if (!isset($_SESSION['id'])) {
       </div>
 
       <div class="chat-input-area">
-        <input type="text" id="messageInput" placeholder="Type a message..." disabled>
-        <button id="sendMessageBtn" disabled>Send</button>
-      </div>
+  <textarea id="messageInput"
+            placeholder="Type a message..."
+            rows="1"
+            disabled></textarea>
+  <button id="sendMessageBtn" disabled>Send</button>
+</div>
+
     </div>
 
   </div>
@@ -292,6 +309,7 @@ if (!isset($_SESSION['id'])) {
     // SÉLECTION DU CHAT GLOBAL
     // Quand l'utilisateur clique sur la barre latérale du chat global
     $("#globalChatSidebar").on("click", function() {
+      console.log('globalChatSidebar clicked');
       openGlobalChat();
     });
   });
@@ -400,6 +418,7 @@ if (!isset($_SESSION['id'])) {
     $("#messageInput").prop("disabled", false).focus();
     $("#sendMessageBtn").prop("disabled", false);
 
+    console.log('openGlobalChat: loading global chat...');
     // Charger et afficher les messages du chat global
     loadGlobalChat();
   }
@@ -454,6 +473,7 @@ if (!isset($_SESSION['id'])) {
       dataType: "json",
       timeout: 8000,
       success: function(data) {
+        console.log('getGlobalChat success:', data);
         let html = "";
         const msgs = (data && data.messages) ? data.messages : [];
 
@@ -485,6 +505,11 @@ if (!isset($_SESSION['id'])) {
       },
       error: function(xhr) {
         console.log("getGlobalChat erreur:", xhr.status, xhr.responseText);
+        // Afficher une alerte légère pour aider au debug si la requête échoue
+        try {
+          const body = xhr.responseText || '';
+          console.warn('getGlobalChat failed body:', body);
+        } catch (e) { /* ignore */ }
       }
     });
   }

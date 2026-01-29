@@ -1,95 +1,73 @@
 <?php
 /**
  * getMessages.php
- * 
- * This script retrieves all direct messages between the current user and another specific user.
- * Used to load the chat history when opening a direct message conversation.
- * 
- * Expected GET parameters:
- *   - trainerId (int): The ID of the user to get messages with
- * 
- * Returns JSON containing:
- *   - username: Name of the other user
- *   - messages: Array of message objects (id, text, timestamp, sender info)
+ *
+ * Ce script récupère tous les messages privés entre l'utilisateur courant et un autre utilisateur.
+ * Il est utilisé pour afficher l'historique de la conversation directe.
+ *
+ * Paramètres GET attendus :
+ *   - trainerId (int) : l'ID de l'utilisateur avec lequel on échange
+ *
+ * Retourne du JSON contenant :
+ *   - username : nom de l'autre utilisateur
+ *   - messages : tableau d'objets message (id, texte, horodatage, indicateur d'expéditeur)
  */
 
-// Start session to access user information
+// Démarre la session pour accéder aux informations de l'utilisateur
 session_start();
-// Set response header as JSON with UTF-8 encoding
+// Définit l'en-tête de réponse en JSON (UTF-8)
 header('Content-Type: application/json; charset=utf-8');
 
-/**
- * AUTHENTICATION CHECK
- * Verify that user is logged in by checking session ID
- */
+// Vérification d'authentification : l'utilisateur est-il connecté ?
 if (!isset($_SESSION['id'])) {
-  http_response_code(401);  // HTTP 401: Unauthorized
-  echo json_encode(["username" => "", "messages" => []]);
-  exit;
+  http_response_code(401); // 401 Unauthorized
+  echo json_encode(["username" => "", "messages" => []]); // Réponse JSON vide
+  exit; // Arrêt du script
 }
 
-/**
- * INPUT VALIDATION
- * Check if trainerId parameter is provided
- */
+// Vérification des paramètres : trainerId doit être présent
 if (!isset($_GET["trainerId"])) {
-  http_response_code(400);  // HTTP 400: Bad Request
+  http_response_code(400); // 400 Bad Request
   echo json_encode(["username" => "", "messages" => []]);
   exit;
 }
 
-// Get user IDs from session and GET parameters
+// Récupère les IDs : utilisateur courant et autre utilisateur
 $me = (int)$_SESSION['id'];
 $other = (int)$_GET["trainerId"];
 
-// Validate that trainerId is positive
+// Vérifie que l'ID fourni est valide (> 0)
 if ($other <= 0) {
-  http_response_code(400);  // HTTP 400: Bad Request
+  http_response_code(400);
   echo json_encode(["username" => "", "messages" => []]);
   exit;
 }
 
-/**
- * DATABASE CONNECTION
- * Include database credentials and establish connection
- */
+// Inclure les identifiants de connexion à la base de données
 require_once(__DIR__ . "/db_credentials.php");
 
-// Create new MySQL connection
+// Création de la connexion MySQLi
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PW, DB_NAME);
-// Check if connection failed
+// Vérifier la connexion
 if ($mysqli->connect_errno) {
-  http_response_code(500);  // HTTP 500: Server Error
+  http_response_code(500); // 500 Server Error
   echo json_encode(["username" => "", "messages" => []]);
   exit;
 }
-// Set character set to UTF-8 for proper Unicode handling
+// Forcer l'encodage en UTF-8
 $mysqli->set_charset("utf8mb4");
 
-/**
- * FETCH OTHER USER'S USERNAME
- * Query to get the name of the user we're chatting with
- */
+// Récupérer le nom d'utilisateur de l'autre participant
 $u = $mysqli->prepare("SELECT username FROM trainers WHERE idTrainer = ?");
-// Bind the other user's ID
-$u->bind_param("i", $other);
-// Execute query
-$u->execute();
-// Bind result to variable
-$u->bind_result($otherName);
-// Fetch the result
-$u->fetch();
-// Close this statement
-$u->close();
-// Set default empty string if user not found
+$u->bind_param("i", $other); // Lier l'ID de l'autre utilisateur
+$u->execute(); // Exécuter la requête
+$u->bind_result($otherName); // Lier la colonne résultat à la variable
+$u->fetch(); // Récupérer la valeur
+$u->close(); // Fermer la requête
+// Si aucun nom trouvé, utiliser une chaîne vide
 if (!$otherName) $otherName = "";
 
-/**
- * RÉCUPÉRER LES MESSAGES DIRECTS
- * Requête pour obtenir tous les messages entre l'utilisateur actuel et l'autre utilisateur
- * Les messages sont récupérés par ordre croissant (les plus anciens d'abord)
- * Limité aux 300 derniers messages pour éviter de charger trop de données
- */
+// Requête : récupérer les messages échangés entre les deux utilisateurs
 $sql = "
 SELECT idMessage, idSender, idReceiver, content, sentAt
 FROM messages
@@ -97,45 +75,36 @@ WHERE (idSender = ? AND idReceiver = ?)
    OR (idSender = ? AND idReceiver = ?)
 ORDER BY idMessage ASC
 LIMIT 300
-";
+"; // Limite pour éviter de charger trop de données
 
-$stmt = $mysqli->prepare($sql);
-// Lier les paramètres: moi->autre, autre->moi (les deux directions)
+$stmt = $mysqli->prepare($sql); // Préparer la requête
+// Lier les paramètres (moi->autre) et (autre->moi)
 $stmt->bind_param("iiii", $me, $other, $other, $me);
-// Exécuter la requête
-$stmt->execute();
-// Obtenir l'ensemble des résultats
-$res = $stmt->get_result();
+$stmt->execute(); // Exécuter
+$res = $stmt->get_result(); // Obtenir le résultat
 
-/**
- * CONSTRUIRE LE TABLEAU DE RÉPONSE
- * Boucler à travers les messages et formater pour la réponse JSON
- */
+// Construire le tableau des messages à retourner
 $messages = [];
 while ($row = $res->fetch_assoc()) {
-  // Déterminer si ce message a été envoyé par l'utilisateur actuel ou reçu
+  // Déterminer si le message a été envoyé par l'utilisateur courant
   $isSentByMe = ((int)$row["idSender"] === $me);
-  
+
+  // Ajouter l'objet message au tableau (adapter les clés attendues par le front)
   $messages[] = [
     "idMessage"   => (int)$row["idMessage"],
-    "messageText" => $row["content"],      // Le frontend s'attend à la clé "messageText"
-    "createdAt"   => $row["sentAt"],       // Le frontend s'attend à la clé "createdAt"
-    "isSent"      => $isSentByMe            // Booléen: vrai si envoyé par l'utilisateur actuel
+    "messageText" => $row["content"], // Le front attend 'messageText'
+    "createdAt"   => $row["sentAt"],  // Le front attend 'createdAt'
+    "isSent"      => $isSentByMe
   ];
 }
 
-/**
- * ENVOYER UNE RÉPONSE RÉUSSIE
- * Retourner le nom d'utilisateur et le tableau des messages
- */
+// Envoyer la réponse JSON contenant le nom d'utilisateur et les messages
 echo json_encode([
   "username" => $otherName,
   "messages" => $messages
 ]);
 
-/**
- * NETTOYAGE
- * Fermer la déclaration et la connexion à la base de données
- */
+// Nettoyage : fermer la requête et la connexion
 $stmt->close();
 $mysqli->close();
+
